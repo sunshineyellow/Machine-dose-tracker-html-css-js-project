@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Saved Medicines</title>
+        <link rel="stylesheet" href="medicine.css">
+    </head>
+    <body>
+        <h1>Medicines</h1>
+        <div class="container">
+            <ul id="medList"></ul>
+            <a href="main.html" class="backlink">Back to Tracker</a>
+        </div>
+        
+        <script>
+           document.addEventListener('DOMContentLoaded', function() {
+            const medList = document.getElementById('medList');
+            const medicines = JSON.parse(localStorage.getItem('medicines')) || [];
+
+            medicines.forEach(med => {
+                const medItem = document.createElement('li');
+                medItem.innerHTML = `${med.name} - ${med.dose} at ${med.time} <button class="remove-btn">Remove</button>`;
+
+                medItem.querySelector('.remove-btn').addEventListener('click', function() {
+                    medList.removeChild(medItem);
+                    removeMedicineFromLocalStorage(med.name, med.dose, med.time);
+                });
+
+                medList.appendChild(medItem);
+            });
+        });
+
+        function removeMedicineFromLocalStorage(name, dose, time) {
+            let medicines = JSON.parse(localStorage.getItem('medicines')) || [];
+            medicines = medicines.filter(med => !(med.name === name && med.dose === dose && med.time === time));
+            localStorage.setItem('medicines', JSON.stringify(medicines));
+        }
+        </script>
+    </body>
+</html>

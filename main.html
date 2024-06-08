@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang='en'>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Medicine Dose Tracker</title>
+        <link rel="stylesheet" href="main.css">
+
+    </head>
+    <body>
+        <h1>Medicine Dose Tracker</h1>
+        <div class="container">
+            <form id="medForm">
+                <input type="text" id="medName" placeholder="Name of the Medicine" required>
+                <input type="text" id="medDose" placeholder="Dose" required>
+                <input type="time" id="medTime" required>
+                <button type="submit">Add medicine</button>
+            </form>
+            <ul id="medList"></ul>
+            <a href="medicines.html" class="link">View Saved Medicines</a>
+        </div>
+        <script>
+            document.getElementById('medForm').addEventListener('submit',function(event){
+                event.preventDefault();
+
+                const medName = document.getElementById('medName').value;
+                const medDose = document.getElementById('medDose').value;
+                const medTime = document.getElementById('medTime').value;
+
+                if(medName && medDose && medTime) {
+                    addMedicine(medName,medDose,medTime);
+                    document.getElementById('medForm').reset();
+                }
+            });
+
+            function addMedicine(name,dose,time) {
+                alert('Medicine Added');
+                const medList = document.getElementById('medList');
+                const medItem = document.createElement('li');
+                medItem.innerHTML = `${name} - ${dose} at ${time} <button class="remove-btn">Remove</button>`;
+                
+                medItem.querySelector('.remove-btn').addEventListener('click',function() {
+                    medList.removeChild(medItem);
+                    removeMedicineFromLocalStorage(name,dose,time);
+                });
+
+                medList.appendChild(medItem);
+                saveMedicineToLocalStorage(name,dose,time);
+            }
+
+            function saveMedicineToLocalStorage(name,dose,time) {
+                const medicines = JSON.parse(localStorage.getItem('medicines')) || [];
+                medicines.push({name,dose,time});
+                localStorage.setItem('medicines',JSON.stringify(medicines));
+            }
+
+            function removeMedicineFromLocalStorage(name,dose,time){
+                let medicines = JSON.parse(localStorage.getItem('medicines')) || [];
+                medicines = medicines.filter(med => !(med.name === name && med.dose === dose && med.time === time));
+                localStorage.setItem('medicines', JSON.stringify(medicines));
+            }
+
+        </script>
+    </body>
+</html>
