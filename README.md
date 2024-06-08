@@ -1,1 +1,1 @@
-# Machine-dose-tracker-html-css-js-project
+# Maedicine-dose-tracker-html-css-js-project
